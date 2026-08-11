@@ -103,24 +103,16 @@
                 </div>
             </div>
 
-            <!-- ── PHOTO FRAME → opens Spotify ── -->
-            <a
-                class="gift-photo-link"
-                href="https://open.spotify.com/playlist/04j6ra71ZCarEwNsQAH4AL?si=KrU866RjQZaGs2AW8ZxgbQ&utm_source=whatsapp&pt=c07e898e58f65b0a6c9517ff66993c5d"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Open our collaborative Spotify playlist"
-            >
-                <div class="gift-photo-frame">
-                    <div class="lace-border">
-                        <img
-                            src="assets/images/image77.jpeg"
-                            alt="Our special anniversary memory"
-                            class="gift-photo-img"
-                        >
-                    </div>
+            <!-- ── PHOTO FRAME — display only, not clickable ── -->
+            <div class="gift-photo-frame">
+                <div class="lace-border">
+                    <img
+                        src="assets/images/image77.jpeg"
+                        alt="Our special anniversary memory"
+                        class="gift-photo-img"
+                    >
                 </div>
-            </a>
+            </div>
 
             <!-- Music info row -->
             <div class="music-info">
@@ -168,16 +160,20 @@
                     </svg>
                 </button>
 
-                <!-- Play / Pause — large centre button -->
-                <button class="ctrl-btn ctrl-play" id="playBtn" aria-label="Play / Pause" type="button">
-                    <svg class="icon-play" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-                        <polygon points="5 3 19 12 5 21 5 3"/>
-                    </svg>
-                    <svg class="icon-pause" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" style="display:none">
-                        <rect x="6" y="4" width="4" height="16" rx="1"/>
-                        <rect x="14" y="4" width="4" height="16" rx="1"/>
-                    </svg>
-                </button>
+                <!-- Play / Pause — large centre button → opens Spotify -->
+                <a
+                    href="https://open.spotify.com/playlist/04j6ra71ZCarEwNsQAH4AL?si=KrU866RjQZaGs2AW8ZxgbQ&utm_source=whatsapp&pt=c07e898e58f65b0a6c9517ff66993c5d"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="ctrl-play-link"
+                    aria-label="Open our collaborative Spotify playlist"
+                >
+                    <button class="ctrl-btn ctrl-play" id="playBtn" aria-label="Play — opens Spotify" type="button">
+                        <svg class="icon-play" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                            <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                    </button>
+                </a>
 
                 <!-- Next -->
                 <button class="ctrl-btn ctrl-small" aria-label="Next track" type="button">
@@ -201,7 +197,7 @@
 
             <!-- Spotify invitation message -->
             <p class="spotify-invitation">
-                Let&#8217;s make a playlist together, join and edit 🩵🕊️
+                Click Play Button My Dear 🩵🕊️
             </p>
 
             <!-- Bottom: Spotify icon + waveform -->

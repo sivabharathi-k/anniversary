@@ -554,3 +554,20 @@ body {
     .music-controls { gap: 0.6rem; }
     .ctrl-play { width: 48px; height: 48px; }
 }
+
+/* Play button link wrapper — keeps layout identical, no underline */
+.ctrl-play-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+/* Photo frame — display only, no pointer */
+.gift-photo-frame {
+    cursor: default;
+}
+.gift-photo-frame:hover {
+    transform: none;
+    box-shadow: none;
+}

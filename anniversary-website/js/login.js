@@ -52,14 +52,15 @@
 
     /* ── Success ────────────────────────────────────────────── */
     function loginSuccess() {
-        /* Hide any error */
         hideError();
 
-        /* Fade out the whole page, then redirect */
-        if (page) {
-            page.classList.add('fade-out');
-        }
+        /* Mark that audio should autoplay on the next page —
+           this submit click counts as user interaction          */
+        sessionStorage.setItem('bgMusicStarted', 'true');
+        sessionStorage.removeItem('bgMusicMuted'); /* reset mute on fresh login */
 
+        /* Fade out then redirect */
+        if (page) page.classList.add('fade-out');
         setTimeout(function () {
             window.location.href = REDIRECT;
         }, 700);

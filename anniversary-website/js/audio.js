@@ -1,88 +1,112 @@
 /**
- * audio.js — Shared background music for all pages
+ * audio.js — Background music for all pages
  *
- * - Plays song.mpeg softly across every page
- * - Remembers mute state across pages via sessionStorage
- * - Injects a small floating mute/unmute button
- * - Handles browser autoplay policy (plays on first interaction)
- * - Respects prefers-reduced-motion (no button animation)
+ * HOW AUTOPLAY WORKS:
+ * Browsers block autoplay until the user interacts. We solve this by:
+ *  1. On the login page — audio.play() is called inside the login form's
+ *     submit handler (login.js sets sessionStorage flag 'bgMusicPlaying').
+ *  2. On every other page — we detect that flag and play immediately on load
+ *     because the browser considers navigation from an interacted page trusted.
+ *  3. Fallback — if still blocked, plays on the very first click/tap.
+ *
+ * Mute state persists across pages via sessionStorage.
  */
 
 (function () {
     'use strict';
 
-    var SONG_SRC   = 'assets/song.mpeg';
-    var VOLUME     = 0.3;                  // 30% — gentle background level
-    var STORAGE_KEY = 'bgMusicMuted';
+    var SONG_SRC    = 'assets/song.mpeg';
+    var VOLUME      = 0.35;
+    var MUTE_KEY    = 'bgMusicMuted';
+    var STARTED_KEY = 'bgMusicStarted';  /* set by login.js on form submit */
 
-    /* ── Resolve correct path from any sub-folder depth ────── */
-    /* All pages are at root level so path is always the same   */
-
-    /* ── Create audio element ───────────────────────────────── */
+    /* ── Audio element ──────────────────────────────────────── */
     var audio = document.createElement('audio');
-    audio.src    = SONG_SRC;
-    audio.loop   = true;
-    audio.volume = VOLUME;
+    audio.src     = SONG_SRC;
+    audio.loop    = true;
+    audio.volume  = VOLUME;
     audio.preload = 'auto';
     document.body.appendChild(audio);
 
     /* ── Restore mute preference ────────────────────────────── */
-    var muted = sessionStorage.getItem(STORAGE_KEY) === 'true';
+    var muted = sessionStorage.getItem(MUTE_KEY) === 'true';
     audio.muted = muted;
 
-    /* ── Attempt autoplay ───────────────────────────────────── */
-    var playPromise = audio.play();
     var started = false;
 
-    if (playPromise !== undefined) {
-        playPromise.then(function () {
-            started = true;
-        }).catch(function () {
-            /* Autoplay blocked — wait for first user interaction */
-            started = false;
-        });
-    }
-
-    /* Play on first touch/click anywhere if blocked */
-    function unlockAudio() {
-        if (!started) {
-            audio.play().then(function () {
+    function tryPlay() {
+        if (started) return;
+        var p = audio.play();
+        if (p !== undefined) {
+            p.then(function () {
                 started = true;
-            }).catch(function () {});
+                sessionStorage.setItem(STARTED_KEY, 'true');
+                updateBtn();
+            }).catch(function () {
+                /* Still blocked — will retry on first interaction */
+            });
         }
-        document.removeEventListener('click',     unlockAudio);
-        document.removeEventListener('touchstart', unlockAudio);
-        document.removeEventListener('keydown',    unlockAudio);
     }
 
-    document.addEventListener('click',      unlockAudio, { once: true });
-    document.addEventListener('touchstart', unlockAudio, { once: true });
-    document.addEventListener('keydown',    unlockAudio, { once: true });
+    /* ── Autoplay: if user already interacted (came from login) */
+    if (sessionStorage.getItem(STARTED_KEY) === 'true') {
+        /* Small delay so the page has painted before audio starts */
+        setTimeout(tryPlay, 200);
+    } else {
+        /* First page load — try immediately (may be allowed on some browsers) */
+        tryPlay();
+    }
 
-    /* ── Inject floating mute button ────────────────────────── */
+    /* ── Fallback: unlock on any first interaction ──────────── */
+    function unlockOnInteraction() {
+        tryPlay();
+        document.removeEventListener('click',      unlockOnInteraction);
+        document.removeEventListener('touchstart', unlockOnInteraction);
+        document.removeEventListener('keydown',    unlockOnInteraction);
+    }
+
+    if (!started) {
+        document.addEventListener('click',      unlockOnInteraction, { passive: true });
+        document.addEventListener('touchstart', unlockOnInteraction, { passive: true });
+        document.addEventListener('keydown',    unlockOnInteraction);
+    }
+
+    /* ── Mute button ────────────────────────────────────────── */
     var btn = document.createElement('button');
-    btn.id = 'bgMuteBtn';
+    btn.id   = 'bgMuteBtn';
+    btn.type = 'button';
     btn.setAttribute('aria-label', muted ? 'Unmute background music' : 'Mute background music');
-    btn.setAttribute('type', 'button');
     btn.innerHTML = muted ? mutedIcon() : unmutedIcon();
     document.body.appendChild(btn);
 
-    /* ── Toggle mute ─────────────────────────────────────────── */
+    function updateBtn() {
+        btn.innerHTML = (audio.muted || !started) ? mutedIcon() : unmutedIcon();
+        btn.setAttribute('aria-label',
+            (audio.muted || !started)
+                ? 'Unmute background music'
+                : 'Mute background music'
+        );
+        if (started && !audio.muted) {
+            btn.classList.add('playing');
+        } else {
+            btn.classList.remove('playing');
+        }
+    }
+
     btn.addEventListener('click', function (e) {
-        e.stopPropagation(); /* don't fire the unlock listener again */
+        e.stopPropagation();
         muted = !muted;
         audio.muted = muted;
-        sessionStorage.setItem(STORAGE_KEY, muted ? 'true' : 'false');
-        btn.innerHTML = muted ? mutedIcon() : unmutedIcon();
-        btn.setAttribute('aria-label', muted ? 'Unmute background music' : 'Mute background music');
+        sessionStorage.setItem(MUTE_KEY, muted ? 'true' : 'false');
 
-        /* If muted was just turned off and audio hasn't started, play */
+        /* If unmuting and not yet started, try to play now */
         if (!muted && !started) {
-            audio.play().then(function () { started = true; }).catch(function () {});
+            tryPlay();
         }
+        updateBtn();
     });
 
-    /* ── SVG icons ───────────────────────────────────────────── */
+    /* ── Icons ──────────────────────────────────────────────── */
     function unmutedIcon() {
         return '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
                '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>' +

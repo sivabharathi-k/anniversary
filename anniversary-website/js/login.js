@@ -14,7 +14,7 @@
         anniversary: '2nd Anniversary'
     };
 
-    var REDIRECT = 'index.html';
+    var REDIRECT = 'home.html';
 
     /* ── DOM refs ───────────────────────────────────────────── */
     var form        = document.getElementById('loginForm');

@@ -3,110 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A heartfelt anniversary letter — Happy 2nd Anniversary, my love.">
-    <title>Happy Anniversary Dears</title>
+    <meta name="description" content="Our Little Forever — Private Anniversary Website">
+    <title>Our Little Forever 🩵✨</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=IM+Fell+English:ital@0;1&family=Cormorant:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Dancing+Script:wght@500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Dancing+Script:wght@500;600;700&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
 
-    <main class="anniversary-page">
+    <!-- Background particle layer -->
+    <div class="bg-particles" aria-hidden="true" id="bgParticles"></div>
 
-        <!-- Paper grain overlay -->
-        <div class="paper-grain" aria-hidden="true"></div>
+    <!-- Background texture overlay -->
+    <div class="bg-texture" aria-hidden="true"></div>
 
-        <!-- ===== HEADER ===== -->
-        <header class="anniversary-header">
+    <!-- ===== LOGIN WRAPPER ===== -->
+    <main class="login-page">
 
-            <!-- Organic SVG Heart -->
-            <div class="heart" aria-hidden="true">
-                <svg viewBox="0 0 100 90" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                    <path
-                        d="M50 82 C48 80, 10 55, 5 35 C1 18, 12 4, 26 4 C36 4, 44 11, 50 19 C56 11, 64 4, 74 4 C88 4, 99 18, 95 35 C90 55, 52 80, 50 82 Z"
-                        fill="none"
-                        stroke="#7a4e2d"
-                        stroke-width="2.8"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    />
-                    <path
-                        d="M50 78 C48.5 76, 13 53, 8.5 34 C5 19, 15 7, 27 7 C37 7, 45 14, 50 21 C55 14, 63 7, 73 7 C85 7, 95 19, 91.5 34 C87 53, 51.5 76, 50 78 Z"
-                        fill="#7a4e2d"
-                        opacity="0.18"
-                    />
+        <div class="login-card" id="loginCard" role="main">
+
+            <!-- Top ornament -->
+            <div class="card-ornament" aria-hidden="true">
+                <svg viewBox="0 0 120 24" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="0" y1="12" x2="45" y2="12" stroke="#c4a08a" stroke-width="0.8" opacity="0.5"/>
+                    <path d="M57 12 C56 10, 50 6, 50 3 C50 0, 52 -1, 54 1 C55 2, 56 3, 57 4 C58 3, 59 2, 60 1 C62 -1, 64 0, 64 3 C64 6, 58 10, 57 12 Z" fill="#c4a08a" opacity="0.55"/>
+                    <line x1="69" y1="12" x2="120" y2="12" stroke="#c4a08a" stroke-width="0.8" opacity="0.5"/>
+                    <circle cx="10" cy="12" r="1.5" fill="#c4a08a" opacity="0.35"/>
+                    <circle cx="110" cy="12" r="1.5" fill="#c4a08a" opacity="0.35"/>
                 </svg>
             </div>
 
-            <h1 class="anniversary-heading">Happy Anniversary Dear</h1>
+            <!-- Heading -->
+            <h1 class="login-title">Our Little Forever 🩵✨</h1>
+            <p class="login-subtitle">Some memories are meant for us alone.</p>
 
-            <p class="subtitle">
-                &ldquo;Wishing you many more years of love and happiness&rdquo;
-            </p>
+            <!-- Form -->
+            <form class="login-form" id="loginForm" novalidate autocomplete="off">
 
-            <div class="header-divider" aria-hidden="true">
-                <span class="divider-line"></span>
-                <span class="divider-ornament">&#10022;</span>
-                <span class="divider-line"></span>
-            </div>
-
-        </header>
-
-        <!-- ===== ANNIVERSARY MESSAGE ===== -->
-        <section class="anniversary-message" aria-label="Anniversary message">
-
-            <article class="message-paper">
-
-                <p class="message-paragraph">
-                    In these two years, we&#8217;ve been through so much together countless happy moments, painful days, little fights, tears, and memories that I&#8217;ll cherish forever. No matter how many ups and downs life brings, I just want to keep walking beside you, choosing you every single day.
-                </p>
-
-                <p class="message-paragraph">
-                    I don&#8217;t know what the future holds, but one thing I know for sure is that I want to travel through this beautiful life with you until our very last breath. Even if life gets difficult, I want it to always be &#8220;you for me and me for you.&#8221; 🥹🩵✨🌎
-                </p>
-
-                <p class="message-paragraph">
-                    Thank you for being my happiness, my peace, and one of the most beautiful parts of my life.
-                </p>
-
-                <p class="message-paragraph anniversary-ending">
-                    I love you more than words can ever explain. 🩵✨
-                </p>
-
-                <p class="final-anniversary">
-                    Happy 2nd Anniversary, my love. 🫂🌎
-                </p>
-
-            </article>
-
-        </section>
-
-        <!-- ===== MEMORIES LINK ===== -->
-        <section class="memories-link-section" aria-label="Navigate to memories">
-            <div class="memories-link-wrapper">
-                <div class="link-divider" aria-hidden="true">
-                    <span class="divider-line"></span>
-                    <span class="divider-ornament small">&#10022;</span>
-                    <span class="divider-line"></span>
+                <!-- Name -->
+                <div class="input-group">
+                    <label for="loginName" class="input-label">Name</label>
+                    <div class="input-wrap">
+                        <input
+                            type="text"
+                            id="loginName"
+                            name="loginName"
+                            class="login-input"
+                            placeholder="Enter Name"
+                            autocomplete="off"
+                            spellcheck="false"
+                        >
+                    </div>
                 </div>
-                <a href="memories.html" class="memories-link" aria-label="Open Our Memories scrapbook page">
-                    <span class="memories-link-text">Open Our Memories</span>
-                    <span class="memories-link-sparkle" aria-hidden="true">✨</span>
-                </a>
-                <p class="memories-link-hint">our little scrapbook awaits&nbsp;&hellip;</p>
-            </div>
-        </section>
 
-        <!-- Footer flourish -->
-        <div class="page-footer" aria-hidden="true">
-            <span class="footer-ornament">&#10022; &#10022; &#10022;</span>
+                <!-- Password -->
+                <div class="input-group">
+                    <label for="loginPassword" class="input-label">Password</label>
+                    <div class="input-wrap">
+                        <input
+                            type="password"
+                            id="loginPassword"
+                            name="loginPassword"
+                            class="login-input"
+                            placeholder="Enter Password"
+                            autocomplete="new-password"
+                        >
+                    </div>
+                </div>
+
+                <!-- Anniversary -->
+                <div class="input-group">
+                    <label for="loginAnniversary" class="input-label">What Special Day</label>
+                    <div class="input-wrap">
+                        <input
+                            type="text"
+                            id="loginAnniversary"
+                            name="loginAnniversary"
+                            class="login-input"
+                            placeholder="Enter today's special day"
+                            autocomplete="off"
+                            spellcheck="false"
+                        >
+                    </div>
+                </div>
+
+                <!-- Hint link — navigates to secret.html without login -->
+                <div class="hint-link-wrap">
+                    <a href="secret.html" class="hint-link" id="hintLink">
+                        Login panna key inga iruku chellam 🩵
+                    </a>
+                </div>
+
+                <!-- Error message -->
+                <p class="error-msg" id="errorMsg" aria-live="polite" role="alert">
+                    Oops... that&#8217;s not our little secret 🩵
+                </p>
+
+                <!-- Submit -->
+                <button type="submit" class="login-btn" id="loginBtn">
+                    Enter Our Story ✨
+                </button>
+
+            </form>
+
+            <!-- Bottom ornament -->
+            <div class="card-ornament bottom" aria-hidden="true">
+                <svg viewBox="0 0 80 16" xmlns="http://www.w3.org/2000/svg">
+                    <text x="28" y="12" font-size="8" fill="#c4a08a" opacity="0.45" font-family="serif">&#10022; &#10022; &#10022;</text>
+                </svg>
+            </div>
+
         </div>
 
     </main>
 
-    <script src="js/script.js"></script>
+    <script src="js/login.js"></script>
 </body>
 </html>

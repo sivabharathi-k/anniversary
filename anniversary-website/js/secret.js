@@ -15,7 +15,7 @@
         backBtn.addEventListener('click', function () {
             if (page) page.classList.add('fade-out');
             setTimeout(function () {
-                window.location.href = 'login.html';
+                window.location.href = 'index.html';
             }, 650);
         });
     }

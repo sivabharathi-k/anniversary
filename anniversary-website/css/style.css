@@ -1,0 +1,457 @@
+/* ============================================================
+   ANNIVERSARY LETTER PAGE — style.css
+   Vintage handmade paper love letter aesthetic
+   ============================================================ */
+
+/* ── Reset & Box Model ──────────────────────────────────────── */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* ── CSS Variables ──────────────────────────────────────────── */
+:root {
+    --paper-color:        #f5efe4;
+    --paper-light:        #fdf6ec;
+    --paper-mid:          #ede3d2;
+    --paper-edge:         #e0d4be;
+
+    --text-brown:         #3d2009;
+    --text-brown-mid:     #5a3010;
+    --text-brown-light:   #7a4e2d;
+    --text-muted:         #9a7554;
+
+    --heading-font:       'Cormorant Garamond', 'IM Fell English', Georgia, serif;
+    --body-font:          'IM Fell English', 'Cormorant Garamond', Georgia, serif;
+    --script-font:        'Dancing Script', cursive;
+    --ornament-font:      'Cormorant', Georgia, serif;
+
+    --message-max-width:  700px;
+}
+
+/* ── Base ───────────────────────────────────────────────────── */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--paper-color);
+    color: var(--text-brown);
+    font-family: var(--body-font);
+    font-size: 18px;
+    line-height: 1.8;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Page Wrapper ───────────────────────────────────────────── */
+.anniversary-page {
+    position: relative;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-color: var(--paper-color);
+    background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"),
+        radial-gradient(ellipse at 50% 30%, #fdf6ec 0%, #f5ece0 40%, #ede3d0 70%, #e0d2bc 100%),
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 28px,
+            rgba(120, 80, 30, 0.012) 28px,
+            rgba(120, 80, 30, 0.012) 29px
+        );
+}
+
+/* Paper grain overlay */
+.paper-grain {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)' opacity='0.07'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+}
+
+/* Vignette */
+.anniversary-page::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(100, 65, 20, 0.18) 100%);
+}
+
+/* Content above overlays */
+.anniversary-page > *:not(.paper-grain) {
+    position: relative;
+    z-index: 2;
+}
+
+/* ── HEADER ─────────────────────────────────────────────────── */
+.anniversary-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-top: clamp(3.5rem, 8vw, 7rem);
+    padding-bottom: clamp(1.5rem, 3vw, 3rem);
+    padding-inline: clamp(1.5rem, 5vw, 3rem);
+}
+
+/* ── Heart ──────────────────────────────────────────────────── */
+.heart {
+    width: clamp(38px, 6vw, 56px);
+    height: auto;
+    margin-bottom: clamp(1rem, 2.5vw, 1.6rem);
+    opacity: 0;
+    transform: scale(0.6);
+    animation: heartAppear 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
+}
+
+.heart svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 1px 3px rgba(90, 48, 16, 0.2));
+}
+
+@keyframes heartAppear {
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* ── Heading ────────────────────────────────────────────────── */
+.anniversary-heading {
+    font-family: var(--heading-font);
+    font-size: clamp(2rem, 5.5vw, 3.8rem);
+    font-weight: 600;
+    color: var(--text-brown);
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    margin-bottom: clamp(0.7rem, 1.5vw, 1.1rem);
+    opacity: 0;
+    transform: translateY(14px);
+    animation: fadeUp 1s ease 0.7s forwards;
+}
+
+/* ── Subtitle ───────────────────────────────────────────────── */
+.subtitle {
+    font-family: var(--body-font);
+    font-size: clamp(0.92rem, 2vw, 1.18rem);
+    font-style: italic;
+    color: var(--text-brown-light);
+    letter-spacing: 0.04em;
+    max-width: 480px;
+    line-height: 1.6;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeUp 1s ease 1s forwards;
+}
+
+/* ── Header Divider ─────────────────────────────────────────── */
+.header-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-top: clamp(1.4rem, 3vw, 2.2rem);
+    opacity: 0;
+    animation: fadeIn 1.2s ease 1.4s forwards;
+}
+
+.divider-line {
+    display: block;
+    width: clamp(50px, 12vw, 120px);
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--text-brown-light) 40%, var(--text-brown-light) 60%, transparent);
+    opacity: 0.45;
+}
+
+.header-divider .divider-line:last-child {
+    background: linear-gradient(to left, transparent, var(--text-brown-light) 40%, var(--text-brown-light) 60%, transparent);
+}
+
+.divider-ornament {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    opacity: 0.7;
+}
+
+/* ── ANNIVERSARY MESSAGE ────────────────────────────────────── */
+.anniversary-message {
+    display: flex;
+    justify-content: center;
+    padding-inline: clamp(1.2rem, 5vw, 3rem);
+    padding-top: clamp(1.5rem, 4vw, 3rem);
+    padding-bottom: clamp(2rem, 4vw, 3.5rem);
+}
+
+.message-paper {
+    width: 100%;
+    max-width: var(--message-max-width);
+    background: linear-gradient(160deg, rgba(255,252,245,0.65) 0%, rgba(245,238,224,0.35) 100%);
+    border: 1px solid rgba(160, 115, 60, 0.18);
+    border-radius: 2px;
+    box-shadow:
+        0 1px 3px rgba(80, 45, 10, 0.08),
+        0 4px 16px rgba(80, 45, 10, 0.07),
+        0 12px 40px rgba(80, 45, 10, 0.06),
+        inset 0 0 60px rgba(220, 195, 155, 0.12);
+    padding: clamp(2rem, 5vw, 3.5rem) clamp(1.8rem, 5vw, 3.5rem);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 1.2s ease 1.6s forwards;
+}
+
+.message-paper::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent 0%, rgba(140,95,40,0.2) 20%, rgba(140,95,40,0.2) 80%, transparent 100%);
+    margin-bottom: clamp(1.6rem, 3.5vw, 2.4rem);
+}
+
+.message-paper::after {
+    content: '';
+    display: block;
+    height: 0;
+}
+
+/* ── Paragraphs ─────────────────────────────────────────────── */
+.message-paragraph {
+    font-family: var(--body-font);
+    font-size: clamp(1rem, 2.2vw, 1.2rem);
+    color: var(--text-brown);
+    line-height: 1.9;
+    letter-spacing: 0.015em;
+    text-align: left;
+    margin-bottom: clamp(1.2rem, 2.5vw, 1.8rem);
+}
+
+.message-paragraph:last-of-type {
+    margin-bottom: 0;
+}
+
+.anniversary-ending {
+    font-style: italic;
+    color: var(--text-brown-mid);
+    font-size: clamp(1.05rem, 2.3vw, 1.25rem);
+    margin-top: clamp(1.4rem, 3vw, 2rem);
+    margin-bottom: 0;
+}
+
+/* ── Final Line ─────────────────────────────────────────────── */
+.final-anniversary {
+    font-family: var(--heading-font);
+    font-size: clamp(1.25rem, 3vw, 1.65rem);
+    font-weight: 600;
+    font-style: italic;
+    color: var(--text-brown);
+    letter-spacing: 0.025em;
+    line-height: 1.4;
+    text-align: center;
+    margin-top: clamp(1.8rem, 4vw, 2.8rem);
+    margin-bottom: 0;
+    padding-top: clamp(1.2rem, 2.5vw, 1.8rem);
+    border-top: 1px solid rgba(120, 80, 30, 0.18);
+}
+
+/* ── MEMORIES LINK SECTION ──────────────────────────────────── */
+.memories-link-section {
+    display: flex;
+    justify-content: center;
+    padding-inline: clamp(1.2rem, 5vw, 3rem);
+    padding-top: clamp(2rem, 4vw, 3rem);
+    padding-bottom: clamp(2rem, 4vw, 3rem);
+    opacity: 0;
+    animation: fadeIn 1.2s ease 2.4s forwards;
+}
+
+.memories-link-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    text-align: center;
+}
+
+.link-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+}
+
+.link-divider .divider-line {
+    width: clamp(40px, 10vw, 90px);
+}
+
+.divider-ornament.small {
+    font-size: 0.5rem;
+}
+
+/* The vintage link itself */
+.memories-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--script-font);
+    font-size: clamp(1.4rem, 3.5vw, 2rem);
+    font-weight: 600;
+    color: var(--text-brown-mid);
+    text-decoration: none;
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+    position: relative;
+    padding-bottom: 3px;
+    transition: color 0.35s ease, transform 0.35s ease;
+}
+
+/* Vintage underline — hand-drawn style */
+.memories-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    background: linear-gradient(to right, transparent 0%, var(--text-brown-light) 15%, var(--text-brown-light) 85%, transparent 100%);
+    opacity: 0.6;
+    transform-origin: left center;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.memories-link:hover {
+    color: var(--text-brown);
+    transform: translateY(-2px);
+}
+
+.memories-link:hover::after {
+    opacity: 1;
+    transform: scaleX(1.04);
+}
+
+.memories-link:focus-visible {
+    outline: 2px dashed var(--text-brown-light);
+    outline-offset: 6px;
+    border-radius: 2px;
+}
+
+.memories-link-text {
+    /* no extra styles needed — inherits from parent */
+}
+
+.memories-link-sparkle {
+    font-size: 0.85em;
+    transition: transform 0.35s ease;
+    display: inline-block;
+}
+
+.memories-link:hover .memories-link-sparkle {
+    transform: rotate(20deg) scale(1.15);
+}
+
+.memories-link-hint {
+    font-family: var(--body-font);
+    font-size: clamp(0.8rem, 1.6vw, 0.95rem);
+    font-style: italic;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    opacity: 0.75;
+}
+
+/* ── Footer ─────────────────────────────────────────────────── */
+.page-footer {
+    text-align: center;
+    padding-bottom: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.footer-ornament {
+    font-family: var(--ornament-font);
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    letter-spacing: 0.5rem;
+    opacity: 0.5;
+}
+
+/* ── Keyframes ──────────────────────────────────────────────── */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* ── Reduced Motion ─────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    .heart,
+    .anniversary-heading,
+    .subtitle,
+    .header-divider,
+    .message-paper,
+    .memories-link-section {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* ── JS stagger classes ─────────────────────────────────────── */
+.para-hidden {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.75s ease, transform 0.75s ease;
+    transition-delay: calc(var(--stagger-index, 0) * 0.16s + 0.1s);
+}
+.para-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .para-hidden { opacity: 1; transform: none; transition: none; }
+}
+
+/* ── Responsive — Tablet ────────────────────────────────────── */
+@media (max-width: 900px) {
+    :root { --message-max-width: 90%; }
+    .anniversary-heading { font-size: clamp(1.9rem, 5.5vw, 2.8rem); }
+    .subtitle { max-width: 380px; }
+}
+
+/* ── Responsive — Mobile ────────────────────────────────────── */
+@media (max-width: 600px) {
+    :root { --message-max-width: 100%; }
+
+    .anniversary-header {
+        padding-top: clamp(2.5rem, 8vw, 4rem);
+        padding-inline: 1.4rem;
+    }
+
+    .anniversary-message,
+    .memories-link-section {
+        padding-inline: 1rem;
+    }
+
+    .message-paper {
+        padding: 1.6rem 1.3rem;
+        border-left: none;
+        border-right: none;
+        border-radius: 0;
+    }
+
+    .message-paragraph { font-size: clamp(0.97rem, 4.2vw, 1.1rem); }
+    .final-anniversary  { font-size: clamp(1.1rem, 5vw, 1.4rem); }
+    .memories-link      { font-size: clamp(1.3rem, 6vw, 1.7rem); }
+}
+
+@media (max-width: 380px) {
+    .anniversary-heading { font-size: 1.75rem; }
+    .subtitle            { font-size: 0.88rem; }
+    .message-paragraph   { font-size: 0.96rem; }
+}

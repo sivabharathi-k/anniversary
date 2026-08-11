@@ -1,0 +1,24 @@
+HOW TO ADD YOUR PHOTOS
+======================
+
+Place your 6 photos in this folder with these exact filenames:
+
+  photo1.jpg  →  upper left polaroid
+  photo2.jpg  →  upper right polaroid
+  photo3.jpg  →  CENTER (main) polaroid
+  photo4.jpg  →  lower left polaroid
+  photo5.jpg  →  lower right polaroid
+  photo6.jpg  →  mid right polaroid
+
+Supported formats: .jpg, .jpeg, .png, .webp
+
+The website will automatically display them when you open index.html.
+
+TO CHANGE CAPTIONS:
+  Open js/memories.js and edit the `caption` fields in the `memories` array at the top of the file.
+
+TO UPLOAD PHOTOS DIRECTLY IN THE BROWSER (preview mode):
+  Click any polaroid frame while the page is open. 
+  A file picker will appear. Choose any image from your device.
+  The photo will appear immediately inside that frame.
+  (This is a preview only — it does not save to disk.)

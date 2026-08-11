@@ -1,0 +1,582 @@
+/* ============================================================
+   SCRAPBOOK MEMORIES PAGE — memories.css
+   Dark vintage scrapbook / Polaroid collage aesthetic
+   ============================================================ */
+
+/* ── Reset ──────────────────────────────────────────────────── */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* ── CSS Variables ──────────────────────────────────────────── */
+:root {
+    --scrap-bg:       #1a1612;
+    --polaroid-bg:    #ede4d0;
+    --tape-color:     rgba(210, 190, 145, 0.72);
+    --tape-border:    rgba(180, 155, 100, 0.4);
+    --torn-1:         #b8966a;
+    --torn-2:         #a07848;
+    --torn-3:         #c8a87a;
+    --torn-4:         #8a6440;
+    --note-bg:        #f0e6cc;
+    --note-text:      #4a2e10;
+    --hand-font:      'Caveat', 'Dancing Script', cursive;
+    --title-font:     'Dancing Script', cursive;
+    --caption-font:   'Caveat', cursive;
+}
+
+/* ── Base ───────────────────────────────────────────────────── */
+html { scroll-behavior: smooth; }
+
+body {
+    background-color: var(--scrap-bg);
+    color: #e0d0b8;
+    font-family: var(--hand-font);
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ── Scrapbook Background ───────────────────────────────────── */
+.scrapbook-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-color: var(--scrap-bg);
+    background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E"),
+        radial-gradient(ellipse at 50% 40%, #2a2218 0%, #1a1410 60%, #0e0c09 100%),
+        repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.012) 3px, rgba(255,255,255,0.012) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(255,255,255,0.008) 3px, rgba(255,255,255,0.008) 4px);
+}
+
+/* ── Page Wrapper ───────────────────────────────────────────── */
+.scrapbook-page {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    padding-bottom: clamp(3rem, 8vw, 6rem);
+    opacity: 0;
+    animation: pageReveal 1s ease 0.2s forwards;
+}
+@keyframes pageReveal { to { opacity: 1; } }
+
+/* ── Back Navigation ────────────────────────────────────────── */
+.back-nav {
+    padding: clamp(1.2rem, 3vw, 2rem) clamp(1.5rem, 4vw, 3rem);
+}
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--hand-font);
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    color: #b89a72;
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: color 0.3s ease, transform 0.3s ease;
+    opacity: 0.8;
+}
+.back-link:hover { color: #d4b882; transform: translateX(-3px); opacity: 1; }
+.back-link:focus-visible { outline: 2px dashed #b89a72; outline-offset: 5px; border-radius: 2px; }
+.back-arrow { font-size: 1.1em; transition: transform 0.3s ease; }
+.back-link:hover .back-arrow { transform: translateX(-3px); }
+
+/* ── Scrapbook Header ───────────────────────────────────────── */
+.scrapbook-header {
+    text-align: center;
+    padding: clamp(0.5rem, 2vw, 1rem) clamp(1rem, 4vw, 3rem) clamp(1rem, 3vw, 2rem);
+}
+.scrapbook-title {
+    font-family: var(--title-font);
+    font-size: clamp(2.2rem, 6vw, 4rem);
+    font-weight: 700;
+    color: #d4b882;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+    opacity: 0;
+    transform: translateY(12px);
+    animation: fadeUp 1s ease 0.5s forwards;
+}
+.scrapbook-subtitle {
+    font-family: var(--hand-font);
+    font-size: clamp(0.95rem, 2vw, 1.2rem);
+    color: #9a7e58;
+    font-style: italic;
+    margin-top: 0.4rem;
+    opacity: 0;
+    animation: fadeIn 1s ease 0.9s forwards;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SCRAPBOOK CANVAS
+   Grid-based layout. Every polaroid lives in its own grid cell
+   so overlap is physically impossible. Rotations are applied
+   via transform — they visually tilt but don't shift the cell.
+   ══════════════════════════════════════════════════════════════ */
+.scrapbook-canvas {
+    position: relative;
+    width: min(1000px, 96vw);
+    margin: clamp(1rem, 3vw, 2.5rem) auto 0;
+    padding: clamp(2rem, 4vw, 4rem) clamp(1.5rem, 3vw, 3rem);
+
+    /* 3-column grid: left | centre | right
+       Centre column is wider for the hero polaroid            */
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: clamp(3.5rem, 6vw, 5.5rem) clamp(2rem, 4vw, 3.5rem);
+    align-items: start;
+    justify-items: center;
+}
+
+/* ── Decorative layers stay out of grid flow ────────────────── */
+.torn-paper,
+.decoration,
+.scrap-note {
+    position: absolute;
+    pointer-events: none;
+}
+
+/* ── Torn Paper ─────────────────────────────────────────────── */
+.torn-paper { border-radius: 2px; z-index: 0; }
+
+.torn-1 {
+    width: clamp(120px, 16vw, 200px); height: clamp(90px, 12vw, 150px);
+    background: var(--torn-1); opacity: 0.18;
+    top: 1%; left: 0;
+    transform: rotate(-3deg);
+    clip-path: polygon(0% 8%, 3% 0%, 100% 2%, 98% 92%, 95% 100%, 5% 98%, 0% 8%);
+}
+.torn-2 {
+    width: clamp(130px, 18vw, 210px); height: clamp(95px, 13vw, 160px);
+    background: var(--torn-2); opacity: 0.15;
+    top: 1%; right: 0;
+    transform: rotate(4deg);
+    clip-path: polygon(2% 5%, 0% 0%, 97% 3%, 100% 88%, 96% 100%, 4% 96%, 2% 5%);
+}
+.torn-3 {
+    width: clamp(140px, 20vw, 240px); height: clamp(100px, 14vw, 170px);
+    background: var(--torn-3); opacity: 0.13;
+    bottom: 3%; left: 0;
+    transform: rotate(-2deg);
+    clip-path: polygon(1% 4%, 4% 0%, 99% 2%, 97% 94%, 94% 100%, 3% 97%, 1% 4%);
+}
+.torn-4 {
+    width: clamp(120px, 16vw, 190px); height: clamp(85px, 11vw, 140px);
+    background: var(--torn-4); opacity: 0.16;
+    bottom: 3%; right: 0;
+    transform: rotate(3deg);
+    clip-path: polygon(3% 6%, 0% 0%, 98% 4%, 100% 90%, 97% 100%, 2% 98%, 3% 6%);
+}
+
+/* ── Decorations ────────────────────────────────────────────── */
+.decoration { z-index: 1; }
+
+.deco-hearts-1 { width: clamp(44px, 6vw, 68px); top: 3%;  left: 3%;  opacity: 0.75; transform: rotate(-10deg); }
+.deco-stars    { width: clamp(55px, 8vw, 85px);  top: 5%;  right: 3%; opacity: 0.85; }
+.deco-stars-2  { width: clamp(44px, 6vw, 65px);  bottom: 8%; left: 3%; opacity: 0.75; }
+.deco-flower-1 { width: clamp(40px, 5.5vw, 62px); top: 0;   right: 12%; opacity: 0.7;  transform: rotate(15deg);  z-index: 2; }
+.deco-flower-2 { width: clamp(32px, 4.5vw, 50px); bottom: 6%; right: 6%; opacity: 0.65; transform: rotate(-20deg); z-index: 2; }
+.deco-flower-3 { width: clamp(28px, 4vw, 44px);   top: 40%;  left: 0.5%; opacity: 0.6;  transform: rotate(8deg);   z-index: 2; }
+
+/* ── Scrap Notes ────────────────────────────────────────────── */
+.scrap-note {
+    background: var(--note-bg);
+    font-family: var(--hand-font);
+    font-size: clamp(0.7rem, 1.4vw, 0.88rem);
+    line-height: 1.5;
+    padding: 0.5rem 0.75rem;
+    border-radius: 1px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4), inset 0 0 20px rgba(180,140,80,0.08);
+    z-index: 6;
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 22px, rgba(160,110,60,0.15) 22px, rgba(160,110,60,0.15) 23px);
+}
+.scrap-note p { font-size: inherit; color: #5a3a18; font-style: italic; }
+
+.note-1 { top: 3%;   left: 26%;  transform: rotate(-5deg); width: clamp(75px, 9vw, 108px); }
+.note-2 { bottom: 12%; left: 15%;  transform: rotate(4deg);  width: clamp(62px, 8vw, 90px);  }
+.note-3 { top: 38%;  right: 2%;  transform: rotate(-3deg); width: clamp(65px, 8vw, 94px);  }
+
+/* ══════════════════════════════════════════════════════════════
+   POLAROID BASE STYLES
+   position: relative so each sits in its grid cell.
+   transform rotates it visually but the cell keeps its space.
+   ══════════════════════════════════════════════════════════════ */
+.polaroid {
+    position: relative;
+    background: var(--polaroid-bg);
+    background-image: linear-gradient(160deg, #ede4d0 0%, #e4d8c0 100%);
+    padding: 10px 10px 36px;
+    border-radius: 2px;
+    width: 100%;
+    max-width: 220px;
+    box-shadow:
+        0 4px 14px rgba(0,0,0,0.5),
+        0 14px 38px rgba(0,0,0,0.38),
+        0 1px 2px rgba(0,0,0,0.65);
+    z-index: 5;
+    transition: transform 0.35s cubic-bezier(0.34, 1.3, 0.64, 1),
+                box-shadow 0.35s ease,
+                z-index 0s 0.35s;
+}
+
+.polaroid:hover {
+    z-index: 20;
+    transition: transform 0.35s cubic-bezier(0.34, 1.3, 0.64, 1),
+                box-shadow 0.35s ease,
+                z-index 0s;
+    box-shadow:
+        0 8px 28px rgba(0,0,0,0.65),
+        0 22px 55px rgba(0,0,0,0.42),
+        0 2px 4px rgba(0,0,0,0.55);
+}
+
+/* ── Photo ──────────────────────────────────────────────────── */
+.photo-container {
+    display: block;
+    width: 100%;
+    line-height: 0;
+    overflow: hidden;
+    background: #c8b898;
+}
+
+.polaroid-img {
+    display: block;
+    width: 100%;
+    height: auto;       /* natural aspect ratio — never crops, never distorts */
+    color: transparent;
+}
+
+/* ── Caption ────────────────────────────────────────────────── */
+.polaroid-caption {
+    font-family: var(--caption-font);
+    font-size: clamp(0.7rem, 1.4vw, 0.88rem);
+    color: #5a3a18;
+    text-align: center;
+    padding-top: 7px;
+    letter-spacing: 0.02em;
+    line-height: 1.3;
+    font-style: italic;
+    pointer-events: none;
+}
+
+/* ── Tape ───────────────────────────────────────────────────── */
+.tape {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-1deg);
+    width: 52px;
+    height: 22px;
+    background: var(--tape-color);
+    border: 1px solid var(--tape-border);
+    z-index: 10;
+    border-radius: 1px;
+    background-image: repeating-linear-gradient(
+        90deg, transparent, transparent 4px,
+        rgba(180,150,90,0.3) 4px, rgba(180,150,90,0.3) 5px
+    );
+}
+.tape-diagonal { transform: translateX(-50%) rotate(-8deg); top: -10px; }
+.tape-center   { width: 62px; height: 24px; top: -13px; }
+
+/* ══════════════════════════════════════════════════════════════
+   GRID SLOT ASSIGNMENTS
+   Layout (3 columns):
+     Row 1:  [P1 left]   [——empty——]   [P2 right]
+     Row 2:  [——empty——] [P3 centre]   [P6 right]
+     Row 3:  [P4 left]   [——empty——]   [P5 right]
+
+   Each polaroid gets a unique cell → zero overlap guaranteed.
+   ══════════════════════════════════════════════════════════════ */
+
+.polaroid-1 {
+    grid-column: 1;
+    grid-row: 1;
+    transform: rotate(-5deg);
+    justify-self: end;
+}
+.polaroid-1:hover { transform: rotate(-3deg) scale(1.05); }
+
+.polaroid-2 {
+    grid-column: 3;
+    grid-row: 1;
+    transform: rotate(4deg);
+    justify-self: start;
+}
+.polaroid-2:hover { transform: rotate(2deg) scale(1.05); }
+
+/* Centre hero — spans its column, slightly larger */
+.polaroid-3.polaroid-center {
+    grid-column: 2;
+    grid-row: 2;
+    max-width: 260px;
+    padding: 13px 13px 46px;
+    transform: rotate(-1.5deg);
+    justify-self: center;
+    z-index: 8;
+}
+.polaroid-3.polaroid-center:hover { transform: rotate(0deg) scale(1.06); z-index: 20; }
+
+.polaroid-4 {
+    grid-column: 1;
+    grid-row: 3;
+    transform: rotate(3.5deg);
+    justify-self: end;
+}
+.polaroid-4:hover { transform: rotate(5deg) scale(1.05); }
+
+.polaroid-5 {
+    grid-column: 3;
+    grid-row: 3;
+    transform: rotate(-4deg);
+    justify-self: start;
+}
+.polaroid-5:hover { transform: rotate(-2deg) scale(1.05); }
+
+.polaroid-6 {
+    grid-column: 3;
+    grid-row: 2;
+    transform: rotate(6deg);
+    justify-self: start;
+}
+.polaroid-6:hover { transform: rotate(4deg) scale(1.05); }
+
+/* ── Footer ─────────────────────────────────────────────────── */
+.scrapbook-footer {
+    text-align: center;
+    padding: clamp(2rem, 5vw, 4rem) 1rem clamp(2.5rem, 6vw, 5rem);
+}
+.footer-text {
+    font-family: var(--hand-font);
+    font-size: clamp(0.85rem, 2vw, 1.05rem);
+    color: #7a6040;
+    font-style: italic;
+    letter-spacing: 0.06em;
+    opacity: 0.7;
+}
+
+/* ── Keyframes ──────────────────────────────────────────────── */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* ── Reduced Motion ─────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    .scrapbook-page, .scrapbook-title, .scrapbook-subtitle { animation: none; opacity: 1; transform: none; }
+    .polaroid { transition: none; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE — TABLET  (≤ 860px)
+   2-column grid, centre photo spans both columns
+   ══════════════════════════════════════════════════════════════ */
+@media (max-width: 860px) {
+    .scrapbook-canvas {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+        gap: clamp(3rem, 6vw, 4.5rem) clamp(1.5rem, 4vw, 3rem);
+        padding: clamp(2rem, 5vw, 3.5rem) clamp(1.2rem, 3vw, 2rem);
+    }
+
+    /* Reset all individual grid placements */
+    .polaroid-1,
+    .polaroid-2,
+    .polaroid-3.polaroid-center,
+    .polaroid-4,
+    .polaroid-5,
+    .polaroid-6 {
+        grid-column: unset;
+        grid-row: unset;
+        justify-self: center;
+        max-width: 260px;
+        width: 100%;
+    }
+
+    /* Centre hero spans full width */
+    .polaroid-3.polaroid-center {
+        grid-column: 1 / -1;
+        max-width: 300px;
+        padding: 12px 12px 44px;
+    }
+
+    /* Re-apply rotations */
+    .polaroid-1 { transform: rotate(-4deg); }
+    .polaroid-1:hover { transform: rotate(-2deg) scale(1.05); }
+
+    .polaroid-2 { transform: rotate(4deg); }
+    .polaroid-2:hover { transform: rotate(2deg) scale(1.05); }
+
+    .polaroid-3.polaroid-center { transform: rotate(-1deg); }
+    .polaroid-3.polaroid-center:hover { transform: rotate(0deg) scale(1.05); }
+
+    .polaroid-4 { transform: rotate(3deg); }
+    .polaroid-4:hover { transform: rotate(5deg) scale(1.05); }
+
+    .polaroid-5 { transform: rotate(-4deg); }
+    .polaroid-5:hover { transform: rotate(-2deg) scale(1.05); }
+
+    .polaroid-6 { transform: rotate(5deg); }
+    .polaroid-6:hover { transform: rotate(3deg) scale(1.05); }
+
+    /* Hide decorations that would overlap the grid */
+    .torn-paper   { display: none; }
+    .deco-flower-3 { display: none; }
+    .note-3        { display: none; }
+
+    .deco-hearts-1 { top: 0.5%; left: 1%;   width: 48px; }
+    .deco-stars    { top: 0.5%; right: 1%;  width: 58px; }
+    .deco-stars-2  { bottom: 1%; left: 1%;  width: 44px; }
+    .deco-flower-1 { top: 0;    right: 8%;  width: 44px; }
+    .deco-flower-2 { bottom: 1%; right: 4%; width: 36px; }
+
+    .note-1 { top: 1.5%; left: 28%; }
+    .note-2 { bottom: 2%; left: 12%; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE — MOBILE  (≤ 560px)
+   Single column — stacked cleanly, alternating lean
+   ══════════════════════════════════════════════════════════════ */
+@media (max-width: 560px) {
+    .scrapbook-canvas {
+        grid-template-columns: 1fr;
+        gap: clamp(2.8rem, 9vw, 4rem);
+        padding: clamp(1.5rem, 5vw, 2.5rem) clamp(1rem, 4vw, 1.5rem);
+    }
+
+    .polaroid-3.polaroid-center {
+        grid-column: 1;
+        max-width: min(88vw, 300px);
+    }
+
+    .polaroid {
+        max-width: min(85vw, 280px);
+    }
+
+    /* Alternate left / right tilt to feel handmade */
+    .polaroid-1 { transform: rotate(-3deg); margin-left:  5%; margin-right: auto; }
+    .polaroid-2 { transform: rotate( 3deg); margin-left: auto; margin-right: 5%; }
+    .polaroid-3 { transform: rotate(-1deg); }
+    .polaroid-4 { transform: rotate( 2deg); margin-left:  5%; margin-right: auto; }
+    .polaroid-5 { transform: rotate(-3deg); margin-left: auto; margin-right: 5%; }
+    .polaroid-6 { transform: rotate( 3deg); margin-left:  5%; margin-right: auto; }
+
+    .polaroid:hover,
+    .polaroid-3.polaroid-center:hover { transform: scale(1.04); }
+
+    /* Minimal decorations on small screens */
+    .deco-hearts-1, .deco-stars-2, .deco-flower-2, .deco-flower-3 { display: none; }
+    .deco-stars    { top: 0; right: 1%; width: 46px; }
+    .deco-flower-1 { top: 0; right: 4%; width: 36px; }
+    .note-1        { font-size: 0.7rem; top: 1%; left: 24%; }
+    .note-2        { display: none; }
+
+    .scrapbook-title { font-size: clamp(2rem, 9vw, 2.8rem); }
+}
+
+/* ── Extra small (≤ 380px) ──────────────────────────────────── */
+@media (max-width: 380px) {
+    .scrapbook-title { font-size: 1.9rem; }
+    .polaroid { padding: 8px 8px 30px; }
+    .polaroid-caption { font-size: 0.68rem; }
+}
+
+/* ── Entrance animation classes (set by JS) ─────────────────── */
+.polaroid-enter-from { opacity: 0; transform: translateY(20px) rotate(var(--rot, 0deg)) !important; }
+.polaroid-enter-to   { opacity: 1; }
+
+/* ══════════════════════════════════════════════════════════════
+   GIFT LINK — Page 2 → Page 3 navigation
+   Appended separately; does not touch existing scrapbook rules.
+   ══════════════════════════════════════════════════════════════ */
+.gift-link-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: clamp(2rem, 5vw, 3.5rem) clamp(1.5rem, 4vw, 3rem) clamp(1rem, 3vw, 2rem);
+    text-align: center;
+}
+
+.gift-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.gift-divider-line {
+    display: block;
+    width: clamp(40px, 10vw, 90px);
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(196,149,106,0.5) 40%, rgba(196,149,106,0.5) 60%, transparent);
+}
+
+.gift-divider:last-of-type .gift-divider-line {
+    background: linear-gradient(to left, transparent, rgba(196,149,106,0.5) 40%, rgba(196,149,106,0.5) 60%, transparent);
+}
+
+.gift-divider-ornament {
+    font-size: 0.55rem;
+    color: #c4956a;
+    opacity: 0.65;
+}
+
+.gift-link {
+    display: inline-block;
+    font-family: 'Dancing Script', 'Caveat', cursive;
+    font-size: clamp(1.35rem, 3.5vw, 1.9rem);
+    font-weight: 600;
+    color: #d4b882;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    position: relative;
+    padding-bottom: 3px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.gift-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent 0%, #c4956a 20%, #c4956a 80%, transparent 100%);
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.gift-link:hover {
+    color: #f0d09a;
+    transform: translateY(-2px);
+}
+
+.gift-link:hover::after {
+    opacity: 0.9;
+}
+
+.gift-link:focus-visible {
+    outline: 2px dashed #b89a72;
+    outline-offset: 6px;
+    border-radius: 2px;
+}
+
+.gift-link-hint {
+    font-family: 'Caveat', cursive;
+    font-size: clamp(0.78rem, 1.8vw, 0.95rem);
+    font-style: italic;
+    color: #7a6040;
+    opacity: 0.7;
+    letter-spacing: 0.05em;
+}

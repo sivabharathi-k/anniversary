@@ -1,0 +1,556 @@
+/* ============================================================
+   MUSIC GIFT PAGE — music.css
+   Romantic vintage music-card aesthetic
+   Reference: soft blush/cream Spotify-style gift card with bows
+   ============================================================ */
+
+/* ── Reset ──────────────────────────────────────────────────── */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* ── Variables ──────────────────────────────────────────────── */
+:root {
+    --bg:           #e8d5c8;
+    --bg-mid:       #dfc8b8;
+    --card-bg:      #f0e4d8;
+    --card-bg-warm: #ede0d2;
+    --rose:         #c4888a;
+    --rose-deep:    #a86868;
+    --rose-light:   #d4a8a8;
+    --rose-pale:    #e8cec8;
+    --text-dark:    #5a3028;
+    --text-mid:     #7a4838;
+    --text-soft:    #9a6858;
+    --text-muted:   #b88878;
+    --lace:         #d8c0b0;
+
+    --heading-font: 'Cormorant Garamond', Georgia, serif;
+    --script-font:  'Dancing Script', cursive;
+    --body-font:    'Caveat', 'Cormorant Garamond', serif;
+}
+
+/* ── Base ───────────────────────────────────────────────────── */
+html { scroll-behavior: smooth; }
+
+body {
+    background-color: var(--bg);
+    min-height: 100vh;
+    font-family: var(--body-font);
+    color: var(--text-dark);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   BACKGROUND LAYER — bows, hearts, texture
+   ══════════════════════════════════════════════════════════════ */
+.bg-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    /* Warm blush paper texture */
+    background-color: var(--bg);
+    background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E"),
+        radial-gradient(ellipse at 50% 50%, #edd5c5 0%, #e0c8b8 45%, #d0b8a8 100%);
+}
+
+/* Vignette */
+.bg-layer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(140,80,60,0.12) 100%);
+}
+
+/* ── Background bow positions ───────────────────────────────── */
+.bg-bow {
+    position: absolute;
+}
+.bg-bow svg { width: 100%; height: auto; display: block; }
+
+.bow-tl  { width: clamp(70px,10vw,130px); top:  2%;  left:  2%;  transform: rotate(-8deg);  }
+.bow-tr  { width: clamp(75px,11vw,140px); top:  1%;  right: 2%;  transform: rotate(6deg);   }
+.bow-ml  { width: clamp(65px, 9vw,120px); top: 40%;  left:  1%;  transform: rotate(-5deg);  }
+.bow-mr  { width: clamp(65px, 9vw,120px); top: 38%;  right: 1%;  transform: rotate(8deg);   }
+.bow-bl  { width: clamp(70px,10vw,125px); bottom:3%; left:  3%;  transform: rotate(4deg);   }
+.bow-br  { width: clamp(72px,10vw,128px); bottom:2%; right: 2%;  transform: rotate(-6deg);  }
+.bow-tc  { width: clamp(60px, 8vw,105px); top:  4%;  left: 50%;  transform: translateX(-50%) rotate(3deg); }
+.bow-bc  { width: clamp(60px, 8vw,105px); bottom:4%; left: 48%;  transform: translateX(-50%) rotate(-4deg); }
+
+/* Background hearts SVG container */
+.bg-hearts {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+.bg-hearts svg { width: 100%; height: 100%; }
+
+/* ══════════════════════════════════════════════════════════════
+   PAGE WRAPPER
+   ══════════════════════════════════════════════════════════════ */
+.music-gift-page {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: clamp(2rem, 5vw, 4rem);
+}
+
+/* ── Back navigation ────────────────────────────────────────── */
+.back-nav {
+    width: 100%;
+    max-width: 500px;
+    padding: clamp(1rem, 3vw, 1.8rem) clamp(1rem, 4vw, 2rem) 0;
+    align-self: center;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--body-font);
+    font-size: clamp(0.82rem, 1.8vw, 0.98rem);
+    color: var(--text-soft);
+    text-decoration: none;
+    opacity: 0.75;
+    transition: color 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+    letter-spacing: 0.03em;
+}
+.back-link:hover { color: var(--rose-deep); opacity: 1; transform: translateX(-3px); }
+.back-link:focus-visible { outline: 2px dashed var(--rose); outline-offset: 5px; border-radius: 2px; }
+.back-arrow { font-size: 1.05em; transition: transform 0.3s ease; }
+.back-link:hover .back-arrow { transform: translateX(-3px); }
+
+/* ══════════════════════════════════════════════════════════════
+   GIFT CARD
+   ══════════════════════════════════════════════════════════════ */
+.gift-card {
+    position: relative;
+    width: min(420px, 92vw);
+    margin: clamp(2rem, 5vw, 4rem) auto clamp(1rem, 3vw, 2rem);
+    padding: clamp(1.8rem, 4vw, 2.6rem) clamp(1.5rem, 4vw, 2.2rem) clamp(1.5rem, 3.5vw, 2rem);
+    background: var(--card-bg);
+    background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='t'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23t)' opacity='0.045'/%3E%3C/svg%3E"),
+        linear-gradient(165deg, #f5eae0 0%, #ede0d0 60%, #e5d4c4 100%);
+    border-radius: 22px;
+    box-shadow:
+        0 2px 6px rgba(120,60,40,0.08),
+        0 8px 28px rgba(120,60,40,0.12),
+        0 24px 60px rgba(120,60,40,0.1),
+        inset 0 1px 0 rgba(255,255,255,0.6);
+
+    opacity: 0;
+    transform: translateY(20px);
+    animation: cardReveal 0.9s ease 0.3s forwards;
+}
+
+@keyframes cardReveal {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Top bow — sits above card, centered ────────────────────── */
+.top-bow {
+    position: absolute;
+    top: -38px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: clamp(80px, 18vw, 120px);
+    z-index: 10;
+    filter: drop-shadow(0 4px 8px rgba(120,60,50,0.2));
+}
+.top-bow svg { width: 100%; height: auto; display: block; }
+
+/* ── Card header ────────────────────────────────────────────── */
+.gift-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: clamp(1rem, 2.5vw, 1.5rem);
+    padding-top: 0.3rem;
+}
+
+.deco-sparkle {
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    color: var(--rose);
+    opacity: 0.7;
+}
+
+.gift-title {
+    font-family: var(--script-font);
+    font-size: clamp(1.1rem, 3vw, 1.45rem);
+    font-weight: 600;
+    color: var(--text-mid);
+    letter-spacing: 0.02em;
+    text-align: center;
+    flex: 1;
+}
+
+.header-heart {
+    width: clamp(20px, 4vw, 26px);
+    opacity: 0.8;
+}
+.header-heart svg { width: 100%; height: auto; display: block; }
+
+/* ══════════════════════════════════════════════════════════════
+   PHOTO FRAME — clicking opens Spotify
+   ══════════════════════════════════════════════════════════════ */
+.gift-photo-link {
+    display: block;
+    text-decoration: none;
+    margin-bottom: clamp(1rem, 2.5vw, 1.4rem);
+}
+
+.gift-photo-frame {
+    width: 100%;
+    border-radius: 8px;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    cursor: pointer;
+}
+
+.gift-photo-link:hover .gift-photo-frame {
+    transform: scale(1.02);
+    box-shadow: 0 6px 24px rgba(120,60,40,0.22);
+}
+
+.gift-photo-link:focus-visible .gift-photo-frame {
+    outline: 2px dashed var(--rose);
+    outline-offset: 4px;
+    border-radius: 10px;
+}
+
+/* ── Lace border ────────────────────────────────────────────── */
+.lace-border {
+    position: relative;
+    padding: clamp(8px, 2vw, 12px);
+    background: var(--card-bg-warm);
+    border-radius: 6px;
+
+    /* Lace effect: layered dotted + dashed borders */
+    border: 2px solid var(--lace);
+    box-shadow:
+        inset 0 0 0 3px var(--card-bg),
+        inset 0 0 0 5px var(--lace),
+        inset 0 0 0 7px var(--card-bg),
+        inset 0 0 0 9px rgba(210,175,155,0.4);
+
+    overflow: hidden;
+}
+
+/* Lace scallop pattern overlay */
+.lace-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+    background-image:
+        radial-gradient(circle at 0 50%, var(--lace) 3px, transparent 3px),
+        radial-gradient(circle at 100% 50%, var(--lace) 3px, transparent 3px),
+        radial-gradient(circle at 50% 0, var(--lace) 3px, transparent 3px),
+        radial-gradient(circle at 50% 100%, var(--lace) 3px, transparent 3px);
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0.6;
+}
+
+/* Photo fills the frame completely */
+.gift-photo-img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 3px;
+    background: var(--rose-pale); /* fallback while loading */
+}
+
+/* ── Fallback when no photo is placed ──────────────────────── */
+.gift-photo-img[src="assets/images/gift-photo.jpg"]::before {
+    /* browsers don't render ::before on img; handled via bg-color fallback above */
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MUSIC INFO
+   ══════════════════════════════════════════════════════════════ */
+.music-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: clamp(0.8rem, 2vw, 1.1rem);
+}
+
+.music-text { flex: 1; }
+
+.song-title {
+    font-family: var(--heading-font);
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    font-weight: 500;
+    color: var(--text-dark);
+    letter-spacing: 0.01em;
+    line-height: 1.3;
+}
+
+.song-artist {
+    font-family: var(--body-font);
+    font-size: clamp(0.78rem, 1.8vw, 0.9rem);
+    color: var(--text-muted);
+    margin-top: 2px;
+    letter-spacing: 0.04em;
+}
+
+.music-heart {
+    width: clamp(18px, 3.5vw, 22px);
+    flex-shrink: 0;
+    margin-left: 0.5rem;
+}
+.music-heart svg { width: 100%; height: auto; display: block; }
+
+/* ══════════════════════════════════════════════════════════════
+   PROGRESS BAR
+   ══════════════════════════════════════════════════════════════ */
+.progress-section {
+    margin-bottom: clamp(1rem, 2.5vw, 1.4rem);
+}
+
+.progress-track {
+    position: relative;
+    height: 3px;
+    background: var(--rose-pale);
+    border-radius: 2px;
+    margin-bottom: 6px;
+}
+
+.progress-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 26%;
+    background: var(--rose);
+    border-radius: 2px;
+}
+
+.progress-dot {
+    position: absolute;
+    top: 50%;
+    left: 26%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    background: var(--rose);
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--card-bg);
+}
+
+.progress-times {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--body-font);
+    font-size: clamp(0.72rem, 1.5vw, 0.82rem);
+    color: var(--text-muted);
+    letter-spacing: 0.03em;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MUSIC CONTROLS
+   ══════════════════════════════════════════════════════════════ */
+.music-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(0.8rem, 3vw, 1.4rem);
+    margin-bottom: clamp(1rem, 2.5vw, 1.4rem);
+}
+
+.ctrl-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-mid);
+    transition: color 0.25s ease, transform 0.25s ease;
+    padding: 0;
+}
+
+.ctrl-btn:hover { color: var(--rose-deep); transform: scale(1.1); }
+.ctrl-btn:focus-visible { outline: 2px dashed var(--rose); outline-offset: 4px; border-radius: 50%; }
+
+/* Small controls */
+.ctrl-small svg {
+    width: clamp(18px, 3.5vw, 22px);
+    height: auto;
+}
+
+/* Play button — large, circular, filled */
+.ctrl-play {
+    width: clamp(46px, 9vw, 58px);
+    height: clamp(46px, 9vw, 58px);
+    background: var(--rose);
+    border-radius: 50%;
+    color: #f8ede8;
+    box-shadow:
+        0 2px 8px rgba(160,90,80,0.3),
+        0 6px 18px rgba(160,90,80,0.2);
+    transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.ctrl-play:hover {
+    background: var(--rose-deep);
+    transform: scale(1.08);
+    box-shadow: 0 4px 14px rgba(140,70,65,0.4);
+    color: #fff;
+}
+
+.ctrl-play svg {
+    width: clamp(18px, 3.5vw, 22px);
+    height: auto;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SPOTIFY INVITATION
+   ══════════════════════════════════════════════════════════════ */
+.spotify-invitation {
+    font-family: var(--body-font);
+    font-size: clamp(0.82rem, 1.9vw, 0.96rem);
+    font-style: italic;
+    color: var(--text-soft);
+    text-align: center;
+    letter-spacing: 0.03em;
+    line-height: 1.5;
+    margin-bottom: clamp(1rem, 2.5vw, 1.5rem);
+    padding: 0 0.5rem;
+    opacity: 0.88;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SPOTIFY BAR — icon + waveform
+   ══════════════════════════════════════════════════════════════ */
+.spotify-bar {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.6rem, 2vw, 1rem);
+    padding-top: clamp(0.8rem, 2vw, 1.1rem);
+    border-top: 1px solid rgba(180,130,115,0.25);
+}
+
+.spotify-icon {
+    width: clamp(26px, 5vw, 32px);
+    flex-shrink: 0;
+}
+.spotify-icon svg { width: 100%; height: auto; display: block; }
+
+/* Waveform */
+.waveform {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: clamp(24px, 4vw, 32px);
+}
+
+.waveform span {
+    display: block;
+    flex: 1;
+    height: var(--h, 50%);
+    background: var(--rose-light);
+    border-radius: 2px;
+    min-height: 3px;
+    animation: waveAnim 1.4s ease-in-out infinite alternate;
+    animation-play-state: paused; /* only animates when JS sets playing */
+}
+
+/* Stagger each bar's animation delay */
+.waveform span:nth-child(1)  { animation-delay: 0s; }
+.waveform span:nth-child(2)  { animation-delay: 0.08s; }
+.waveform span:nth-child(3)  { animation-delay: 0.16s; }
+.waveform span:nth-child(4)  { animation-delay: 0.24s; }
+.waveform span:nth-child(5)  { animation-delay: 0.32s; }
+.waveform span:nth-child(6)  { animation-delay: 0.08s; }
+.waveform span:nth-child(7)  { animation-delay: 0.18s; }
+.waveform span:nth-child(8)  { animation-delay: 0.28s; }
+.waveform span:nth-child(9)  { animation-delay: 0.04s; }
+.waveform span:nth-child(10) { animation-delay: 0.14s; }
+.waveform span:nth-child(11) { animation-delay: 0.22s; }
+.waveform span:nth-child(12) { animation-delay: 0.30s; }
+.waveform span:nth-child(13) { animation-delay: 0.06s; }
+.waveform span:nth-child(14) { animation-delay: 0.12s; }
+.waveform span:nth-child(15) { animation-delay: 0.20s; }
+.waveform span:nth-child(16) { animation-delay: 0.10s; }
+.waveform span:nth-child(17) { animation-delay: 0.18s; }
+.waveform span:nth-child(18) { animation-delay: 0.26s; }
+.waveform span:nth-child(19) { animation-delay: 0.02s; }
+.waveform span:nth-child(20) { animation-delay: 0.16s; }
+.waveform span:nth-child(21) { animation-delay: 0.24s; }
+.waveform span:nth-child(22) { animation-delay: 0.10s; }
+.waveform span:nth-child(23) { animation-delay: 0.20s; }
+.waveform span:nth-child(24) { animation-delay: 0.06s; }
+.waveform span:nth-child(25) { animation-delay: 0.14s; }
+.waveform span:nth-child(26) { animation-delay: 0.22s; }
+.waveform span:nth-child(27) { animation-delay: 0.30s; }
+
+@keyframes waveAnim {
+    from { transform: scaleY(0.35); }
+    to   { transform: scaleY(1); }
+}
+
+/* Animate waveform when playing class is set */
+.waveform.playing span {
+    animation-play-state: running;
+}
+
+/* ── Keyframes ──────────────────────────────────────────────── */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* ── Reduced Motion ─────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    .gift-card { animation: none; opacity: 1; transform: none; }
+    .waveform span { animation: none; }
+    .gift-photo-frame,
+    .ctrl-btn,
+    .ctrl-play,
+    .back-link { transition: none; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Tablet ─────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+    .gift-card { width: min(380px, 92vw); }
+
+    /* Hide far background bows, keep nearest ones */
+    .bow-tc, .bow-bc, .bow-ml, .bow-mr { display: none; }
+
+    .song-title  { font-size: clamp(0.95rem, 4.5vw, 1.1rem); }
+    .gift-title  { font-size: clamp(1rem, 4.8vw, 1.3rem); }
+}
+
+/* ── Mobile ─────────────────────────────────────────────────── */
+@media (max-width: 420px) {
+    .gift-card {
+        width: 93vw;
+        padding: 1.4rem 1.2rem 1.2rem;
+        border-radius: 18px;
+    }
+
+    .bow-tl, .bow-tr { width: 70px; }
+    .bow-bl, .bow-br { display: none; }
+
+    .music-controls { gap: 0.6rem; }
+    .ctrl-play { width: 48px; height: 48px; }
+}
